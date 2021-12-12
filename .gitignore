@@ -128,4 +128,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .idea/
+bert_pretrain/
+pytorch_pretrained/
+THUCNews/
 
