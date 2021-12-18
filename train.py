@@ -129,7 +129,10 @@ def test(config, model, test_iter):
     """
     模型测试
     """
-    model.load_state_dict(torch.load(config.save_path))
+    # model.load_state_dict(torch.load(config.save_path))
+    checkpoint = torch.load(config.save_path)
+    model.load_state_dict(checkpoint['model'])
+
     model.eval()
     start_time = time.time()
     test_acc, test_loss, test_report, test_confusion = evaluate(config, model, test_iter, test=True)
