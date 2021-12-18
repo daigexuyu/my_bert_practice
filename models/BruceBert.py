@@ -18,7 +18,9 @@ class Config(object):
         # 类别
         self.class_list = [x.strip() for x in open(dataset + '/data/class.txt').readlines()]
         # 模型训练结果
-        self.save_path = dataset + '/saved_dict/' + self.model_name + '.ckpt'
+        # self.save_path = dataset + '/saved_dict/' + self.model_name + '.ckpt'
+        self.save_path = dataset + '/saved_dict/' + self.model_name + '.pth'
+
         # 设备配置
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         # 若超过 1000 batch 还没有提升，就early stop

@@ -35,5 +35,6 @@ if __name__ == '__main__':
 
     # 模型训练， 评估与测试
     model = x.Model(config).to(config.device)
+
     train.train(config, model, train_iter, dev_iter, test_iter)
 

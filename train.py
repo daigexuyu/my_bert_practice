@@ -9,6 +9,7 @@ from sklearn import metrics
 import time
 from pytorch_pretrained.optimization import BertAdam
 import utils
+import os
 
 
 def train(config, model, train_iter, dev_iter, test_iter):
@@ -40,8 +41,18 @@ def train(config, model, train_iter, dev_iter, test_iter):
     dev_best_loss = float('inf') #记录校验集合最好的loss
     last_improve = 0 # 记录上次校验集合loss下降的batch数
     flag = False # 记录是否很久没有效果提升
+    epoch = 0
+    if os.path.exists(config.save_path):
+        print('Resume')
+        checkpoint = torch.load(config.save_path)
+        model.load_state_dict(checkpoint['model'])
+        optimizer.load_state_dict(checkpoint['optimizer'])
+        epoch = checkpoint['epoch']
+
+    # if epoch == 0:
     model.train()
-    for epoch in range(config.num_epochs):
+    # for epoch in range(config.num_epochs):
+    while epoch < config.num_epochs:
         print('Epoch {}/{}'.format(epoch+1, config.num_epochs))
         for i, (trains, labels) in enumerate(train_iter):
             outputs = model(trains)
@@ -56,7 +67,10 @@ def train(config, model, train_iter, dev_iter, test_iter):
                 dev_acc, dev_loss = evaluate(config, model, dev_iter)
                 if dev_loss < dev_best_loss:
                     dev_best_loss = dev_loss
-                    torch.save(model.state_dict(), config.save_path)
+                    # torch.save(model.state_dict(), config.save_path)
+                    # 保存明细模型
+                    state = {'model': model.state_dict(), 'optimizer': optimizer.state_dict(), 'epoch': epoch}
+                    torch.save(state, config.save_path)
                     improve = '*'
                     last_improve = total_batch
                 else:
@@ -75,6 +89,7 @@ def train(config, model, train_iter, dev_iter, test_iter):
 
         if flag:
             break
+        epoch += 1
     test(config, model, test_iter)
 
 
