@@ -10,9 +10,9 @@ class Config(object):
     def __init__(self,dataset):
         self.model_name='BruceBert'
         #train set
-        self.train_path = dataset + '/data/dev.txt'
+        self.train_path = dataset + '/data/train.txt'
         #test set
-        self.test_path = dataset + '/data/dev.txt'
+        self.test_path = dataset + '/data/test.txt'
         # validation set
         self.dev_path = dataset + '/data/dev.txt'
         # 类别
